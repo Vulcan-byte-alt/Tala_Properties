@@ -1,0 +1,1108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tala Properties</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/ScrollTrigger.min.js"></script>
+    <!-- Font Awesome CDN (Add this in the <head> section) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <style>
+        /* Tailwind styles for gold colors */
+        .text-gold {
+            color: #c5912c;
+        }
+        .bg-gold {
+            background-color: #c5912c;
+        }
+        .hover-bg-gold:hover {
+            background-color: #b07f26;
+        }
+
+        /* Gradient text color */
+        .bg-gradient-text {
+            background-image: linear-gradient(to right, #000000, #c5912c);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* Counter animation */
+        .counter {
+            font-size: 3rem;
+            font-weight: bold;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* Fade-in animation for h1 */
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 1.5s ease-in-out forwards;
+        }
+
+        /* Fade-in from bottom animation for p */
+        @keyframes fade-in-bottom {
+            0% {
+                opacity: 0;
+                transform: translateY(20px); /* Start from below */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-bottom {
+            animation: fade-in-bottom 1.5s ease-in-out forwards;
+        }
+
+
+    
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+
+        /* Inactive tab - add ring */
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+
+        /* Active tab - fill color */
+        .tab-btn.active {
+            background: linear-gradient(to right, #000, #f1c40f, #000); /* Example active tab color */
+            color: #fff; /* Text color for active tab */
+        }
+
+        /* Optional: Add ring effect on inactive tab */
+        .tab-btn:not(.active) {
+            border: 2px solid transparent;
+            outline: none;
+        }
+        .tab-btn:focus {
+            outline: none; /* Remove the default outline */
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.8); /* Ring effect on inactive tabs */
+        }
+
+        #listings {
+            overflow-y: scroll; /* Ensures vertical scrolling is always available */
+            overflow-x: hidden; /* Prevents horizontal scrolling */
+        }
+
+        /* Hide the scrollbar visually, but retain its functionality */
+        #listings::-webkit-scrollbar {
+            display: none; /* Hides the scrollbar in WebKit browsers (Chrome, Safari) */
+        }
+
+        #listings {
+            -ms-overflow-style: none; /* Hides scrollbar in Internet Explorer and Edge */
+            scrollbar-width: none;    /* Hides scrollbar in Firefox */
+        }
+
+         html {
+            scroll-behavior: smooth; /* Enable smooth scrolling */
+        }
+
+    </style>
+</head>
+<body class="bg-black text-white font-sans">
+    <!-- Navbar -->
+    <nav class="bg-black bg-opacity-50 backdrop-filter backdrop-blur-md py-6 px-6 border-b fixed top-0 w-full z-50"
+        style="border-color: #c5912c;">
+        <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+            <img src="Tala Properties.png" alt="Logo" class="h-8 md:h-12 max-h-12">
+        </div>
+
+    
+            <!-- Hamburger Icon for Mobile -->
+            <div class="lg:hidden flex items-center">
+                <button id="burger-menu" class="text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-8 w-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+    
+            <!-- Menu Links -->
+            <ul id="menu" class="hidden lg:flex space-x-6 text-white">
+                <li><a href="#about" class="hover:text-[#c5912c]">About Us</a></li>
+                <li><a href="#listings" class="hover:text-[#c5912c]">Properties</a></li>
+                <li><a href="#gallery" class="hover:text-[#c5912c]">Gallery</a></li>
+                <li><a href="#contact" class="hover:text-[#c5912c]">Contact Us</a></li>
+            </ul>
+    
+            <!-- Mobile Menu (Hidden by default) -->
+            <ul id="mobile-menu"
+                class="lg:hidden absolute top-20 left-0 w-full bg-black bg-opacity-80 text-white hidden space-y-6 p-6 transform -translate-y-full transition-all duration-300 ease-in-out">
+                <li><a href="#about" class="hover:text-[#c5912c]">About Us</a></li>
+                <li><a href="#listings" class="hover:text-[#c5912c]">Properties</a></li>
+                <li><a href="#gallery" class="hover:text-[#c5912c]">Gallery</a></li>
+                <li><a href="#contact" class="hover:text-[#c5912c]">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+
+
+    
+    <!-- Hero Section -->
+    <section class="relative bg-cover bg-center h-screen" style="background-image: url('bg.jpg');">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="text-center">
+                <!-- Gradient text with improved contrast -->
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.629);">
+                    Welcome to Tala Properties
+                </h1>
+                <p class="text-lg md:text-xl text-grey animate-fade-in-bottom bg-gradient-to-r bg-clip-text text-transparent"
+                style="background-image: linear-gradient(to right, #ffffff, #ffffff, #ffffff); text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.629);">
+                    Your gateway to luxury living and dream properties.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section id="about" class="relative py-16 text-white overflow-hidden" style="background-color: #020202;">
+        <!-- Faint Golden Glow at the Top -->
+        <div
+            class="absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-[rgba(255,215,0,0.3)] via-[rgba(0,0,0,0)] to-transparent opacity-50">
+        </div>
+    
+        <!-- Faint Golden Glow at the Bottom -->
+        <div
+            class="absolute inset-x-0 bottom-0 h-60 bg-gradient-to-t from-[rgba(255,215,0,0.3)] via-[rgba(0,0,0,0)] to-transparent opacity-50">
+        </div>
+    
+        <!-- Main Content -->
+        <div class="relative container mx-auto px-6 md:px-12 lg:px-20 flex flex-col md:flex-row items-center md:space-x-12">
+    
+            <!-- Content Section -->
+            <div class="md:w-1/2 space-y-6">
+                <!-- Section Title -->
+                <h3 class="text-xl font-semibold text-gold-400">Who We Are</h3>
+                <h2 class="text-3xl md:text-5xl font-bold mb-2 leading-tight animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);">
+                    About Us
+                </h2>
+    
+                <p class="text-lg leading-relaxed text-gray-300">
+                    &ldquo;&nbsp;With over a decade of experience in the real estate industry, Tala Properties has been
+                    helping people find their dream homes. Our team is passionate about providing personalized services and
+                    delivering exceptional experiences. Whether you're buying, selling, or renting, we offer expert guidance
+                    through
+                    every step of the process.&nbsp;&rdquo;
+                </p>
+    
+                <br>
+    
+                <!-- Info and Stats -->
+                <div class="flex flex-col md:flex-row justify-center gap-6 md:gap-12">
+                    <!-- First Box -->
+                    <div
+                        class="text-center bg-white bg-opacity-10 p-6 rounded-xl shadow-xl transform hover:scale-105 transition-all flex flex-col justify-center items-center w-full sm:w-36 md:w-48 h-auto md:h-48 min-h-[150px]">
+                        <div class="text-[#c5912c] text-4xl md:text-5xl font-bold mb-2" id="years">0+</div>
+                        <p class="text-white text-sm md:text-xl">Years of Experience</p>
+                    </div>
+    
+                    <!-- Second Box -->
+                    <div
+                        class="text-center bg-white bg-opacity-10 p-6 rounded-xl shadow-xl transform hover:scale-105 transition-all flex flex-col justify-center items-center w-full sm:w-36 md:w-48 h-auto md:h-48 min-h-[150px]">
+                        <div class="text-[#c5912c] text-4xl md:text-5xl font-bold mb-2" id="client">0+</div>
+                        <p class="text-white text-sm md:text-xl">Happy Clients</p>
+                    </div>
+    
+                    <!-- Third Box -->
+                    <div
+                        class="text-center bg-white bg-opacity-10 p-6 rounded-xl shadow-xl transform hover:scale-105 transition-all flex flex-col justify-center items-center w-full sm:w-36 md:w-48 h-auto md:h-48 min-h-[150px]">
+                        <div class="text-[#c5912c] text-4xl md:text-5xl font-bold mb-2" id="properties">0+</div>
+                        <p class="text-white text-sm md:text-xl">Properties Sold</p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Image Section -->
+            <div class="md:w-1/2 flex justify-center items-center mt-8 md:mt-0 md:order-2">
+                <div class="relative w-full">
+                    <img src="about.jpg" alt="about-property"
+                        class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300 max-w-full mx-auto md:ml-12" />
+                </div>
+            </div>
+    
+        </div>
+    </section>
+
+
+
+    <!-- Property Listings Preview -->
+    <section id="listings" class="py-16 px-6 bg-white text-black relative">
+        <div
+            class="absolute top-0 left-0 w-full h-full inset-0 bg-gradient-to-tr from-[#c5912c] via-transparent to-[#c5912c] opacity-30 pointer-events-none">
+        </div>
+        <div class="container mx-auto">
+            <center><h3 class="text-xl font-semibold text-gold-400">Find Your Dream Home Among Our Exclusive Properties</h3></center>
+            <br>
+            <!-- Section Title -->
+            <center><h2 class="text-3xl md:text-5xl font-bold mb-2 leading-tight animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.412);height: 55px;">
+                Exclusive Properties
+            </h2></center>
+            <br>
+    
+            <!-- Tabs for Navigation -->
+            <div class="flex justify-center space-x-4 mb-8">
+                <button
+                    class="tab-btn px-6 py-2 font-semibold text-lg bg-gradient-to-r from-black via-yellow-600 to-black text-white rounded-full shadow-md hover:bg-[#c5912c] hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-500 active"
+                    data-tab="apartments">
+                    Apartments
+                </button>
+                <button
+                    class="tab-btn px-6 py-2 font-semibold text-lg bg-gradient-to-r from-black via-yellow-600 to-black text-white rounded-full shadow-md hover:bg-[#c5912c] hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    data-tab="villas">
+                    Villas
+                </button>
+            </div>
+
+            <!-- Property Grid -->
+            <div class="tab-content" id="apartments">
+                <div class="flex flex-wrap justify-center gap-6">
+                    <!-- Apartment 1 -->
+                    <div
+                        class="relative border-4 border-gold bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl shadow-lg p-4 overflow-hidden hover:shadow-2xl hover:scale-105 transition-transform transform w-full md:w-1/3 lg:w-1/4" style="height: 500px;">
+                        <div class="relative">
+                            <img src="ap1.webp"Apartment 1"
+                                class="w-full h-64 object-cover rounded-xl mb-4">
+                            <!-- Price with golden background -->
+                            <div
+                                class="absolute bottom-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black py-2 px-5 rounded-lg text-sm font-semibold">
+                                $850,000
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-yellow-500 via-yellow-700 to-black text-transparent bg-clip-text">Modern Apartment</h3>
+                        <div class="flex items-center space-x-1 text-gray-400">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Location Icon" class="w-5 h-5">
+                            <span>New York, USA</span> <!-- Example location -->
+                        </div>
+                        <br>
+                        <div class="flex space-x-4 mb-4">
+                            <!-- Room Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/room.png" alt="Rooms Icon" class="w-5 h-5">
+                                <span>3</span> <!-- Number of rooms -->
+                            </div>
+                            <!-- Square Footage Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/expand.png" alt="Area Icon" class="w-5 h-5">
+                                <span>1200 sq. ft</span> <!-- Square footage -->
+                            </div>
+                            <!-- Bathroom Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/bath.png" alt="Bathroom Icon" class="w-5 h-5">
+                                <span>2</span> <!-- Number of bathrooms -->
+                            </div>
+                        </div>
+                        <a href="#!"
+                            class="absolute bottom-4 right-4 bg-gradient-to-r from-yellow-500 via-black-700 to-black text-white py-2 px-5 rounded-lg text-sm font-semibold hover:scale-105 hover:shadow-xl shadow-lg transition-transform duration-300">
+                            Book Now
+                        </a>
+                    </div>
+            
+                    <!-- Apartment 2 -->
+                    <div
+                        class="relative border-4 border-gold bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl shadow-lg p-4 overflow-hidden hover:shadow-2xl hover:scale-105 transition-transform transform w-full md:w-1/3 lg:w-1/4" style="height: 500px;">
+                        <div class="relative">
+                            <img src="ap2.png" alt="Apartment 2"
+                                class="w-full h-64 object-cover rounded-xl mb-4">
+                            <!-- Price with golden background -->
+                            <div
+                                class="absolute bottom-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black py-2 px-5 rounded-lg text-sm font-semibold">
+                                $750,000
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-yellow-500 via-yellow-700 to-black text-transparent bg-clip-text">Cozy Apartment</h3>
+                        <div class="flex items-center space-x-1 text-gray-400">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Location Icon" class="w-5 h-5">
+                            <span>California, USA</span> <!-- Example location -->
+                        </div>
+                        <br>
+                        <div class="flex space-x-4 mb-4">
+                            <!-- Room Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/room.png" alt="Rooms Icon" class="w-5 h-5">
+                                <span>2</span> <!-- Number of rooms -->
+                            </div>
+                            <!-- Square Footage Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/expand.png" alt="Area Icon" class="w-5 h-5">
+                                <span>900 sq. ft</span> <!-- Square footage -->
+                            </div>
+                            <!-- Bathroom Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/bath.png" alt="Bathroom Icon" class="w-5 h-5">
+                                <span>1</span> <!-- Number of bathrooms -->
+                            </div>
+                        </div>
+                        <a href="#!"
+                            class="absolute bottom-4 right-4 bg-gradient-to-r from-yellow-500 via-black-700 to-black text-white py-2 px-5 rounded-lg text-sm font-semibold hover:scale-105 hover:shadow-xl shadow-lg transition-transform duration-300">
+                            Book Now
+                        </a>
+                    </div>
+            
+                    <!-- Apartment 3 -->
+                    <div
+                        class="relative border-4 border-gold bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl shadow-lg p-4 overflow-hidden hover:shadow-2xl hover:scale-105 transition-transform transform w-full md:w-1/3 lg:w-1/4" style="height: 500px;">
+                        <div class="relative">
+                            <img src="ap3.jpg" alt="Apartment 3"
+                                class="w-full h-64 object-cover rounded-xl mb-4">
+                            <!-- Price with golden background -->
+                            <div
+                                class="absolute bottom-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black py-2 px-5 rounded-lg text-sm font-semibold">
+                                $950,000
+                            </div>
+
+                        </div>
+                        <h3
+                            class="text-2xl font-bold mb-2 bg-gradient-to-r from-yellow-500 via-yellow-700 to-black text-transparent bg-clip-text">
+                            Luxury Apartment
+                        </h3>
+                        <div class="flex items-center space-x-1 text-gray-400">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Location Icon" class="w-5 h-5">
+                            <span>Madrid, Spain</span> <!-- Example location -->
+                        </div>
+                        <br>
+                        <div class="flex space-x-4 mb-4">
+                            <!-- Room Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/room.png" alt="Rooms Icon" class="w-5 h-5">
+                                <span>4</span> <!-- Number of rooms -->
+                            </div>
+                            <!-- Square Footage Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/expand.png" alt="Area Icon" class="w-5 h-5">
+                                <span>1500 sq. ft</span> <!-- Square footage -->
+                            </div>
+                            <!-- Bathroom Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/bath.png" alt="Bathroom Icon" class="w-5 h-5">
+                                <span>3</span> <!-- Number of bathrooms -->
+                            </div>
+                        </div>
+                        <a href="#!"
+                            class="absolute bottom-4 right-4 bg-gradient-to-r from-yellow-500 via-black-700 to-black text-white py-2 px-5 rounded-lg text-sm font-semibold hover:scale-105 hover:shadow-xl shadow-lg transition-transform duration-300">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Villas Section -->
+            <div class="tab-content hidden" id="villas" >
+                <div class="flex flex-wrap justify-center gap-6">
+                    <!-- Villa 1 -->
+                    <div
+                        class="relative border-4 border-gold bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl shadow-lg p-4 overflow-hidden hover:shadow-2xl hover:scale-105 transition-transform transform w-full md:w-1/3 lg:w-1/4" style="height: 490px;">
+                        <div class="relative">
+                            <img src="vl1.webp" alt="Villa 1"
+                                class="w-full h-64 object-cover rounded-xl mb-4">
+                            <!-- Price with golden background -->
+                            <div
+                                class="absolute bottom-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black py-2 px-5 rounded-lg text-sm font-semibold">
+                                $1,200,000
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-yellow-500 via-yellow-700 to-black text-transparent bg-clip-text">Luxury Villa</h3>
+                        <div class="flex items-center space-x-1 text-gray-400">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Location Icon" class="w-5 h-5">
+                            <span>Barcelona, Spain</span> <!-- Example location -->
+                        </div>
+                        <br>
+                        <div class="flex space-x-4 mb-4">
+                            <!-- Room Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/room.png" alt="Rooms Icon" class="w-5 h-5">
+                                <span>5</span> <!-- Number of rooms -->
+                            </div>
+                            <!-- Square Footage Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/expand.png" alt="Area Icon" class="w-5 h-5">
+                                <span>2000 sq. ft</span> <!-- Square footage -->
+                            </div>
+                            <!-- Bathroom Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/bath.png" alt="Bathroom Icon" class="w-5 h-5">
+                                <span>4</span> <!-- Number of bathrooms -->
+                            </div>
+                        </div>
+                        <a href="#!"
+                            class="absolute bottom-4 right-4 bg-gradient-to-r from-yellow-500 via-black-700 to-black text-white py-2 px-5 rounded-lg text-sm font-semibold hover:scale-105 hover:shadow-xl shadow-lg transition-transform duration-300">
+                            Book Now
+                        </a>
+                    </div>
+                    <!-- Villa 2 -->
+                    <div
+                        class="relative border-4 border-gold bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl shadow-lg p-4 overflow-hidden hover:shadow-2xl hover:scale-105 transition-transform transform w-full md:w-1/3 lg:w-1/4" style="height: 490px;">
+                        <div class="relative">
+                            <img src="vl2.jpg" alt="Villa 2" class="w-full h-64 object-cover rounded-xl mb-4">
+                            <!-- Price with golden background -->
+                            <div
+                                class="absolute bottom-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black py-2 px-5 rounded-lg text-sm font-semibold">
+                                $1,000,000
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-yellow-500 via-yellow-700 to-black text-transparent bg-clip-text">Cozy Villa</h3>
+                        <div class="flex items-center space-x-1 text-gray-400">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Location Icon" class="w-5 h-5">
+                            <span>Las Vegas, USA</span> <!-- Example location -->
+                        </div>
+                        <br>
+                        <div class="flex space-x-4 mb-4">
+                            <!-- Room Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/room.png" alt="Rooms Icon" class="w-5 h-5">
+                                <span>4</span> <!-- Number of rooms -->
+                            </div>
+                            <!-- Square Footage Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/expand.png" alt="Area Icon" class="w-5 h-5">
+                                <span>1600 sq. ft</span> <!-- Square footage -->
+                            </div>
+                            <!-- Bathroom Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/bath.png" alt="Bathroom Icon" class="w-5 h-5">
+                                <span>3</span> <!-- Number of bathrooms -->
+                            </div>
+                        </div>
+                        <a href="#!"
+                            class="absolute bottom-4 right-4 bg-gradient-to-r from-yellow-500 via-black-700 to-black text-white py-2 px-5 rounded-lg text-sm font-semibold hover:scale-105 hover:shadow-xl shadow-lg transition-transform duration-300">
+                            Book Now
+                        </a>
+                    </div>
+                    
+                    <!-- Villa 3 -->
+                    <div
+                        class="relative border-4 border-gold bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl shadow-lg p-4 overflow-hidden hover:shadow-2xl hover:scale-105 transition-transform transform w-full md:w-1/3 lg:w-1/4" style="height: 490px;">
+                        <div class="relative">
+                            <img src="vl3.jpg" alt="Villa 3" class="w-full h-64 object-cover rounded-xl mb-4">
+                            <!-- Price with golden background -->
+                            <div
+                                class="absolute bottom-4 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black py-2 px-5 rounded-lg text-sm font-semibold">
+                                $1,500,000
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 bg-gradient-to-r from-yellow-500 via-yellow-700 to-black text-transparent bg-clip-text">Spacious Villa</h3>
+                        <div class="flex items-center space-x-1 text-gray-400">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/marker.png" alt="Location Icon" class="w-5 h-5">
+                            <span>Toronto, Canada</span> <!-- Example location -->
+                        </div>
+                        <br>
+                        <div class="flex space-x-4 mb-4">
+                            <!-- Room Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/room.png" alt="Rooms Icon" class="w-5 h-5">
+                                <span>6</span> <!-- Number of rooms -->
+                            </div>
+                            <!-- Square Footage Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/expand.png" alt="Area Icon" class="w-5 h-5">
+                                <span>2500 sq. ft</span> <!-- Square footage -->
+                            </div>
+                            <!-- Bathroom Icon -->
+                            <div class="flex items-center space-x-1 text-gray-700">
+                                <img src="https://img.icons8.com/ios-filled/50/000000/bath.png" alt="Bathroom Icon" class="w-5 h-5">
+                                <span>5</span> <!-- Number of bathrooms -->
+                            </div>
+                        </div>
+                        <a href="#!"
+                            class="absolute bottom-4 right-4 bg-gradient-to-r from-yellow-500 via-black-700 to-black text-white py-2 px-5 rounded-lg text-sm font-semibold hover:scale-105 hover:shadow-xl shadow-lg transition-transform duration-300">
+                            Book Now
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section id="gallery" class="py-16 px-6 bg-black text-gray-100 relative">
+        <!-- Golden Gradient at the Top -->
+        <div
+            class="absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-[rgba(255,215,0,0.3)] via-[rgba(0,0,0,0)] to-transparent opacity-70">
+        </div>
+
+        <!-- Faint Golden Glow at the Bottom -->
+        <div
+            class="absolute inset-x-0 bottom-0 h-60 bg-gradient-to-t from-[rgba(255,215,0,0.3)] via-[rgba(0,0,0,0)] to-transparent opacity-50">
+        </div>
+        <div class="container mx-auto">
+            <center><h3 class="text-xl font-semibold text-gold-400">Browse Our Exclusive Property Gallery</h3></center>
+            <br>
+            <!-- Section Title -->
+            <center><h2 class="text-3xl md:text-5xl font-bold mb-2 leading-tight animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.481);height: 55px;">  
+                Gallery
+            </h2></center>
+            <br><br>
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item -->
+                <div class="relative group">
+                    <img src="gl1.jpg" alt="Gallery 1"
+                        class="w-full h-64 object-cover rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-0 group-hover:opacity-90 transition-opacity duration-300 rounded-lg">
+                    </div>
+                    <div
+                        class="absolute bottom-4 left-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <h3 class="text-xl font-semibold">VINTAGE VILLA</h3>
+                        <p class="text-sm text-gray-300">A serene time travel</p>
+                    </div>
+                </div>
+    
+                <!-- Repeat for other images -->
+                <div class="relative group">
+                    <video
+                        class="w-full h-64 object-cover rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-300"
+                        src="triton.webm" alt="Gallery 2" muted loop autoplay playsinline
+                        preload="metadata" loading="lazy">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-0 group-hover:opacity-90 transition-opacity duration-300 rounded-lg">
+                    </div>
+                    <div
+                        class="absolute bottom-4 left-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <h3 class="text-xl font-semibold">TRITON VILLA</h3>
+                        <p class="text-sm text-gray-300">The pinnacle of perfection.</p>
+                    </div>
+                </div>
+    
+                <div class="relative group">
+                    <img src="gl3.jpeg" alt="Gallery 3"
+                        class="w-full h-64 object-cover rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-0 group-hover:opacity-90 transition-opacity duration-300 rounded-lg">
+                    </div>
+                    <div
+                        class="absolute bottom-4 left-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <h3 class="text-xl font-semibold">AZURE VILLA</h3>
+                        <p class="text-sm text-gray-300">A symbol of luxury.</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="text-center mt-8">
+                <button
+                    class="px-6 py-2 text-base font-semibold text-white bg-gradient-to-r from-[#ffab03] via-[#000000] to-[#ffab03] rounded-full shadow-md transform transition-all duration-300 hover:from-[#ff8c00] hover:via-[#000000] hover:to-[#ff8c00] hover:scale-105">
+                    See More
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="team" class="py-16 px-6 bg-white text-black relative">
+        <!-- Gradient Background -->
+        <div
+            class="absolute top-0 left-0 w-full h-full inset-0 bg-gradient-to-tr from-[#c5912c] via-transparent to-[#c5912c] opacity-30 pointer-events-none">
+        </div>
+    
+        <div class="container mx-auto relative">
+            <center><h3 class="text-xl font-semibold text-gold-400">Our Expert Team Dedicated to Finding Your Perfect Property</h3></center>
+            <br>
+            <!-- Section Heading -->
+            <center><h2
+                class="text-3xl md:text-5xl font-bold mb-8 leading-tight animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #c5912c, #c5912c); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3); height: 56px;">
+                Meet Our Experts</center>
+            </h2>
+            <p class="text-center text-gray-700 max-w-2xl mx-auto mb-12">
+                Our experienced team of real estate professionals is here to guide you through every step of the journey,
+                from finding your dream home to sealing the deal.
+            </p>
+    
+            <!-- Team Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Team Member -->
+                <div
+                    class="team-member text-center bg-gray-50 p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <img src="team1.webp" alt="Team Member Photo"
+                        class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-[#c5912c]" />
+                    <h3 class="text-xl font-bold mb-2">Sophia Johnson</h3>
+                    <p class="text-gray-600 mb-4">Luxury Property Specialist</p>
+                    <p class="text-sm text-gray-500">
+                        Sophia has over 10 years of experience connecting clients with the most exquisite properties in the
+                        city.
+                    </p>
+                </div>
+    
+                <!-- Team Member -->
+                <div
+                    class="team-member text-center bg-gray-50 p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <img src="team2.jpeg" alt="Team Member Photo"
+                        class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-[#c5912c]" />
+                    <h3 class="text-xl font-bold mb-2">Michael Brown</h3>
+                    <p class="text-gray-600 mb-4">Real Estate Consultant</p>
+                    <p class="text-sm text-gray-500">
+                        Michael specializes in helping clients find properties that meet their investment goals and
+                        lifestyle needs.
+                    </p>
+                </div>
+    
+                <!-- Team Member -->
+                <div
+                    class="team-member text-center bg-gray-50  p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <img src="team3.jpeg" alt="Team Member Photo"
+                        class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-[#c5912c]" />
+                    <h3 class="text-xl font-bold mb-2">Emma White</h3>
+                    <p class="text-gray-600 mb-4">Architectural Advisor</p>
+                    <p class="text-sm text-gray-500">
+                        With a keen eye for design, Emma ensures every property has the perfect blend of aesthetics and
+                        functionality.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="client-feedback" class="py-16 px-6 relative bg-black text-gray-100">
+        <!-- Gradient Background -->
+        <div
+            class="absolute top-0 left-0 w-full h-full inset-0 bg-gradient-to-tr from-[#c5912c] via-transparent to-[#c5912c] opacity-30 pointer-events-none">
+        </div>
+    
+        <div class="container mx-auto relative">
+            <center><h3 class="text-xl font-semibold text-gold-400">Customer Reviews: Why Clients Trust Us</h3></center>
+            <br>
+            <!-- Section Heading -->
+            <center><h2
+                class="text-3xl md:text-5xl font-bold mb-8 leading-tight animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #c5912c, #c5912c); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.484); height: 56px;margin-bottom: 40px;">
+                What Our Clients Say
+            </h2></center>
+    
+            <!-- Feedback Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feedback Item -->
+                <div class="bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <p class="text-gray-700 italic mb-4">
+                        "The team helped me find my dream villa in no time. Their professionalism and dedication were
+                        unmatched!"
+                    </p>
+                    <div class="flex items-center space-x-4 ">
+                        <img src="client1.jpg" alt="Client Photo"
+                            class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                        <div>
+                            <h4 class="text-lg text-black font-bold">John Doe</h4>
+                            <p class="text-sm text-gray-500">Dubai, UAE</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Feedback Item -->
+                <div class="bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <p class="text-gray-700 italic mb-4">
+                        "Their expertise made the entire process stress-free. I highly recommend their services to anyone
+                        looking for luxury properties."
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <img src="client2.jpg" alt="Client Photo"
+                            class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                        <div>
+                            <h4 class="text-lg text-black font-bold">Jane Smith</h4>
+                            <p class="text-sm text-gray-500">London, UK</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Feedback Item -->
+                <div class="bg-white p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <p class="text-gray-700 italic mb-4">
+                        "A seamless experience from start to finish. They truly understood my vision and brought it to
+                        life.Truly amazing!"
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <img src="client3.jpg" alt="Client Photo"
+                            class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                        <div>
+                            <h4 class="text-lg text-black font-bold">Michael Johnson</h4>
+                            <p class="text-sm text-gray-500">New York, USA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-16 px-6 relative bg-white text-black">
+        <!-- Gradient Background -->
+        <div
+            class="absolute top-0 left-0 w-full h-full inset-0 bg-gradient-to-tr from-[#c5912c] via-transparent to-[#c5912c] opacity-30 pointer-events-none">
+        </div>
+    
+        <div class="container mx-auto relative">
+            <center><h3 class="text-xl font-semibold text-gold-400">Got Questions? Find Answers Here</h3></center>
+            <br>
+            <!-- Title -->
+            <center>
+                <h2 class="text-3xl md:text-5xl font-bold mb-8 leading-tight animate-fade-in bg-gradient-to-r bg-clip-text text-transparent 
+                    sm:pb-8 md:pb-0"
+                    style="background-image: linear-gradient(to right, #c5912c, #c5912c); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3); padding-bottom: 18px;">
+                    Frequently Asked Questions
+                </h2>
+            </center>
+
+
+    
+            <!-- FAQ Accordion -->
+            <div class="space-y-8">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item border-b border-gray-300">
+                    <button
+                        class="w-full text-left flex items-center justify-between text-xl font-semibold text-black py-4 hover:text-[#c5912c] focus:outline-none">
+                        What is the purpose of this website?
+                        <span class="transform rotate-0 transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="faq-answer text-gray-600 text-sm pl-4 pb-4 hidden">
+                        This website showcases luxury villas and provides detailed information about each villa for
+                        prospective buyers.
+                    </div>
+                </div>
+    
+                <!-- FAQ Item 2 -->
+                <div class="faq-item border-b border-gray-300">
+                    <button
+                        class="w-full text-left flex items-center justify-between text-xl font-semibold text-black py-4 hover:text-[#c5912c] focus:outline-none">
+                        How can I book a villa?
+                        <span class="transform rotate-0 transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="faq-answer text-gray-600 text-sm pl-4 pb-4 hidden">
+                        You can book a villa by filling out the contact form or calling our customer service for more
+                        details on availability and pricing.
+                    </div>
+                </div>
+    
+                <!-- FAQ Item 3 -->
+                <div class="faq-item border-b border-gray-300">
+                    <button
+                        class="w-full text-left flex items-center justify-between text-xl font-semibold text-black py-4 hover:text-[#c5912c] focus:outline-none">
+                        What amenities do the villas offer?
+                        <span class="transform rotate-0 transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="faq-answer text-gray-600 text-sm pl-4 pb-4 hidden">
+                        The villas offer world-class amenities including a private pool, gym, entertainment areas, and
+                        panoramic views of the surrounding landscapes.
+                    </div>
+                </div>
+    
+                <!-- FAQ Item 4 -->
+                <div class="faq-item border-b border-gray-300">
+                    <button
+                        class="w-full text-left flex items-center justify-between text-xl font-semibold text-black py-4 hover:text-[#c5912c] focus:outline-none">
+                        Can I visit the villas before booking?
+                        <span class="transform rotate-0 transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="faq-answer text-gray-600 text-sm pl-4 pb-4 hidden">
+                        Yes, you can schedule a visit to the villas. Please contact our customer service team for
+                        arrangements.
+                    </div>
+                </div>
+    
+                <!-- FAQ Item 5 -->
+                <div class="faq-item">
+                    <button
+                        class="w-full text-left flex items-center justify-between text-xl font-semibold text-black py-4 hover:text-[#c5912c] focus:outline-none">
+                        Do you offer special discounts for long stays?
+                        <span class="transform rotate-0 transition-transform duration-300">&#43;</span>
+                    </button>
+                    <div class="faq-answer text-gray-600 text-sm pl-4 pb-4 hidden">
+                        Yes, we offer special pricing and discounts for long-term bookings. Please reach out to our team for
+                        more details.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+    <section id="contact" class="py-16 px-6 relative bg-black text-gray-100">
+        <!-- Gradient Background -->
+        <div
+            class="absolute top-0 left-0 w-full h-full inset-0 bg-gradient-to-tr from-[#c5912c] via-transparent to-[#c5912c] opacity-30 pointer-events-none">
+        </div>
+
+        <div class="container mx-auto relative">
+            <center><h3 class="text-xl font-semibold text-gold-400">Contact Us: We're Here to Help</h3></center>
+            <br>
+            <center><h2 class="text-3xl md:text-5xl font-bold mb-8 leading-tight animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #c5912c, #c5912c); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.467); height: 56px;">
+                Get in Touch
+            </h2></center>
+            <p class="text-base md:text-lg text-grey animate-fade-in-bottom bg-gradient-to-r bg-clip-text text-transparent"
+                style="background-image: linear-gradient(to right, #ffffff, #ffffff, #ffffff); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);">
+                Whether you have a question about our properties, pricing, or anything else, our team is here to help you.
+                Reach out to us, and we’ll respond as soon as possible.
+            </p>
+            <br><br>
+
+    
+            <form class="space-y-6 max-w-lg mx-auto">
+                <div>
+                    <label for="name" class="block text-gray-400 mb-1">Name</label>
+                    <input type="text" id="name" placeholder="Your Name"
+                        class="w-full py-3 px-4 rounded-md border border-gray-600 bg-black text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none">
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-400 mb-1">Email</label>
+                    <input type="email" id="email" placeholder="Your Email"
+                        class="w-full py-3 px-4 rounded-md border border-gray-600 bg-black text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none">
+                </div>
+                <div>
+                    <label for="message" class="block text-gray-400 mb-1">Message</label>
+                    <textarea id="message" rows="4" placeholder="Write your message here"
+                        class="w-full py-3 px-4 rounded-md border border-gray-600 bg-black text-gray-200 focus:ring-2 focus:ring-gold focus:outline-none"></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit"
+                        class="bg-gradient-to-tr from-[#c5912c] via-black to-[#c5912c] hover:opacity-90 text-black py-3 px-8 rounded-md font-semibold transition duration-300 hover:from-[#ff8c00] hover:via-[#000000] hover:to-[#ff8c00] hover:scale-105 text-white ">
+                        Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="py-6 bg-black bg-opacity-60 backdrop-blur-sm border-t border-[#c5912c] text-white">
+        <div
+            class="container mx-auto flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start space-y-6 md:space-y-0">
+            <!-- Left Section: Logo and Social Media Links -->
+            <div class="flex flex-col items-center md:items-start space-y-4 md:space-y-2">
+                <!-- Logo -->
+                <img src="Tala Properties.png" alt="Tala Properties Logo" class="h-12 mb-4">
+    
+                <!-- Social Media Links -->
+                <div class="flex space-x-4 md:space-x-6">
+                    <a href="#!" class="text-gold text-2xl hover:text-white transition duration-300">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#!" class="text-gold text-2xl hover:text-white transition duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#!" class="text-gold text-2xl hover:text-white transition duration-300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+    
+            <!-- Right Section: Contact Information -->
+            <div class="flex flex-col items-center md:items-end space-y-4 md:space-y-2">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-map-marker-alt text-gold"></i>
+                    <span>1234 Property Lane, City Name, Country</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-phone text-gold"></i>
+                    <span>(123) 456-7890</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-envelope text-gold"></i>
+                    <span>info@talaproperties.com</span>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Copyright -->
+        <div class="text-center mt-6">
+            <p>&copy; 2024 Tala Properties Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+
+
+
+
+    <script>
+        function countUp(element, endValue, duration, suffix = "") {
+            let startValue = 0;
+            const step = (endValue / duration) * 50; // Adjust step interval for smooth counting
+
+            const interval = setInterval(() => {
+                startValue += step;
+                if (startValue >= endValue) {
+                    startValue = endValue;
+                    clearInterval(interval);
+                }
+                element.textContent = Math.floor(startValue) + suffix; // Add suffix like "+" after counting
+            }, 50);
+        }
+
+        const statsSection = document.querySelector('#about');  // Target the whole section or a specific class
+        const yearsCount = document.getElementById('years')
+        const clientsCount = document.getElementById('client')
+        const propertiesCount = document.getElementById('properties')
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log('Section is in view');
+                    countUp(yearsCount, 10, 2000, "+"); // 10+ years of experience
+                    countUp(clientsCount, 500, 2000, "+"); // 500+ happy clients
+                    countUp(propertiesCount, 200, 2000, "+"); // 200+ properties sold
+                    observer.unobserve(entry.target); // Stop observing after animation
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        observer.observe(statsSection); // Start observing the section
+    </script>
+
+
+
+
+
+        <!-- JavaScript to Toggle Menu -->
+        <script>
+            const burgerMenu = document.getElementById('burger-menu');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            burgerMenu.addEventListener('click', () => {
+                // Toggle visibility and smooth transition of the mobile menu
+                mobileMenu.classList.toggle('hidden');
+                mobileMenu.classList.toggle('-translate-y-full');  // Hide when closed
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                    const tabButtons = document.querySelectorAll('.tab-btn');
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    const listingsContainer = document.getElementById('listings');
+
+                    // Show the default tab (apartments)
+                    const defaultTab = document.getElementById('apartments');
+                    defaultTab.classList.add('active');
+
+                    tabButtons.forEach((btn) => {
+                        btn.addEventListener('click', () => {
+                            // Remove 'active' class from all buttons
+                            tabButtons.forEach((button) => button.classList.remove('active'));
+                            // Add 'active' class to clicked button
+                            btn.classList.add('active');
+
+                            // Hide all content
+                            tabContents.forEach((content) => {
+                                content.classList.remove('active');
+                                content.style.display = 'none';
+                            });
+
+                            // Show clicked tab content
+                            const tabId = btn.getAttribute('data-tab');
+                            const activeTab = document.getElementById(tabId);
+                            activeTab.style.display = 'block';
+                            setTimeout(() => activeTab.classList.add('active'), 10);
+
+                            // Maintain scroll position and prevent layout shifts
+                            listingsContainer.style.overflowY = 'scroll';
+                        });
+                    });
+                });
+
+
+        </script>
+
+        <script>
+            // Script to toggle FAQ answers
+            const faqItems = document.querySelectorAll('.faq-item button');
+            faqItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const answer = item.nextElementSibling; // This is the .faq-answer div
+                    const icon = item.querySelector('span');
+
+                    // Toggle the visibility of the answer and the rotation of the icon
+                    answer.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-45');
+                });
+            });
+        </script>
+
+
+        <script>
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Detect screen size
+            const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+
+            // Adjust animation settings based on screen size
+            const animationSettings = {
+                duration: isSmallScreen ? 1.2 : 0.8, // Longer duration on mobile for better visibility
+                opacity: 1,
+                y: 0,
+                ease: "power2.out",
+            };
+
+            const scrollTriggerSettings = {
+                start: isSmallScreen ? "top 95%" : "top 90%", // Trigger even earlier on mobile (adjusted to 40%)
+                toggleActions: "play none none none",
+                refreshPriority: 1,
+            };
+
+            gsap.utils.toArray('#about, #listings, #gallery,#team,#client-feedback,#faq, #contact').forEach(section => {
+                gsap.fromTo(
+                    section,
+                    { opacity: 0, y: isSmallScreen ? 100 : 50 }, // Increase Y movement for mobile
+                    {
+                        ...animationSettings,
+                        scrollTrigger: {
+                            trigger: section,
+                            ...scrollTriggerSettings,
+                        }
+                    }
+                );
+            });
+        </script>
+    
+
+</body>
+</html>
