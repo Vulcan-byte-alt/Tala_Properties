@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tala Properties</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/ScrollTrigger.min.js"></script>
+    <!-- Font Awesome CDN (Add this in the <head> section) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        /* Tailwind styles for gold colors */
+        .text-gold {
+            color: #c5912c;
+        }
+
+        .bg-gold {
+            background-color: #c5912c;
+        }
+
+        .hover-bg-gold:hover {
+            background-color: #b07f26;
+        }
+
+        /* Gradient text color */
+        .bg-gradient-text {
+            background-image: linear-gradient(to right, #000000, #c5912c);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* Counter animation */
+        .counter {
+            font-size: 3rem;
+            font-weight: bold;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* Fade-in animation for h1 */
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 1.5s ease-in-out forwards;
+        }
+
+        /* Fade-in from bottom animation for p */
+        @keyframes fade-in-bottom {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+                /* Start from below */
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-bottom {
+            animation: fade-in-bottom 1.5s ease-in-out forwards;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .active-tab {
+            color: #ffab03;
+            border-bottom: 2px solid #ffab03;
+            transform: scale(1.1);
+        }
+
+        .tab-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .tab-section {
+            display: none;
+            opacity: 0;
+        }
+
+        .tab-section:not(.hidden) {
+            display: grid;
+            opacity: 1;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .hover-effect {
+            transition: transform 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+
+        #listings {
+            overflow-y: scroll;
+            /* Ensures vertical scrolling is always available */
+            overflow-x: hidden;
+            /* Prevents horizontal scrolling */
+        }
+
+        /* Hide the scrollbar visually, but retain its functionality */
+        #listings::-webkit-scrollbar {
+            display: none;
+            /* Hides the scrollbar in WebKit browsers (Chrome, Safari) */
+        }
+
+        #listings {
+            -ms-overflow-style: none;
+            /* Hides scrollbar in Internet Explorer and Edge */
+            scrollbar-width: none;
+            /* Hides scrollbar in Firefox */
+        }
+
+        html {
+            scroll-behavior: smooth;
+            /* Enable smooth scrolling */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .nav-right {
+            justify-content: flex-end;
+        }
+
+        .hover-effect {
+            transform: scale(1);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .hover-effect:hover {
+            transform: scale(1.05);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+        }
+
+        /* FAQ container hover effect */
+        .border {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .border:hover {
+            transform: scale(1.05);
+            /* Slightly enlarge the FAQ item */
+            box-shadow: 0px 4px 20px rgba(255, 171, 3, 0.4);
+            /* Optional shadow for better emphasis */
+        }
+
+        /* Answer transition and default state */
+        .answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+
+        /* Rotate icon smoothly */
+        .icon {
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .banner {
+            font-family: 'Roboto', sans-serif;
+            position: sticky;
+            top: 0; /* Add this to make it stick to the top */
+            z-index: 1000; /* Ensure it appears above other elements */
+        }
+
+
+        @media (max-width: 640px) {
+            .banner {
+                padding: 0.5rem 1rem;
+                /* Smaller padding for mobile screens */
+            }
+
+            .banner i {
+                font-size: 0.75rem;
+                /* Smaller icon size */
+            }
+
+            .banner a {
+                font-size: 0.625rem;
+                /* Smaller font size for email */
+            }
+
+            .banner h1 {
+                font-size: 0.625rem;
+                /* Smaller font size for header */
+            }
+
+            .banner a.text-sm {
+                font-size: 0.75rem;
+                /* Smaller icon sizes for social media */
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .padding-desktop {
+                padding-right: 90px;
+                /* Padding for larger screens */
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .padding-desktop {
+                padding-right: 0;
+                /* No padding for mobile devices */
+            }
+        }
+
+       /* Style for small screens */
+        @media (max-width: 640px) {
+            .fas.fa-envelope {
+                font-size: 0.75rem; /* Smaller icon size */
+            }
+
+            .flex a {
+                font-size: 0.625rem; /* Smaller font size for email */
+            }
+        }
+
+        /* Mobile-specific styles */
+        @media (max-width: 790px) {
+            .tab-buttons {
+                flex-wrap: wrap; /* Adjust layout for smaller screens */
+                overflow-x: hidden; /* Disable horizontal scrolling on mobile */
+                -ms-overflow-style: none;  /* Internet Explorer 10+ */
+                scrollbar-width: none;  /* Firefox */
+            }
+
+            .tab-buttons::-webkit-scrollbar { 
+                display: none;  /* Safari and Chrome */
+            }
+
+            .tab-btn {
+                padding-left: 2rem; /* Adjust spacing for readability */
+                padding-right: 2rem;
+            }
+        }
+
+       
+        /* By default, display all dots */
+        .carousel-dot {
+            display: inline-block;
+        }
+
+        
+
+        /* On larger screens (PC, laptop), hide dots with data-index > 1 */
+        @media (min-width: 768px) {
+            .carousel-dot[data-index="2"],
+            .carousel-dot[data-index="3"],
+            .carousel-dot[data-index="4"],
+            .carousel-dot[data-index="5"] {
+                display: none;
+            }
+        }
+
+        /* Footer Adjustments for Mobile Screens */
+        @media (max-width: 768px) {
+            #footer .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Center items horizontally */
+                text-align: center; /* Center-align text for mobile */
+            }
+
+            #footer img {
+                margin: 0 auto 1rem; /* Center logo and add spacing below */
+                display: block;
+            }
+
+            #footer .space-y-8 {
+                width: 100%; /* Ensure full width on mobile */
+                margin: 0 auto; /* Center elements within their container */
+                text-align: center; /* Center text within each section */
+            }
+
+            #footer .space-y-8 h3,
+            #footer .space-y-8 a {
+                text-align: center; /* Center text */
+            }
+
+            #footer .flex.space-x-8 {
+                justify-content: center; /* Center social media icons */
+                margin-bottom: 1rem; /* Add spacing below icons */
+            }
+
+            #footer .flex.space-x-8 a {
+                font-size: 2rem; /* Adjust icon size */
+            }
+
+            #footer .flex.items-center {
+                justify-content: center; /* Center contact information */
+                flex-direction: column; /* Stack items vertically */
+                text-align: center; /* Center text */
+                margin-bottom: 1rem; /* Add spacing below each section */
+            }
+
+            #footer .flex.items-center i {
+                margin-bottom: 0.5rem; /* Add spacing below icons */
+            }
+
+            #footer .text-center {
+                margin-right: 0; /* Remove right margin */
+                text-align: center; /* Center text */
+            }
+        }
+
+        /* Default left alignment for mobile devices */
+        #client-feedback {
+            text-align: left;
+        }
+
+        /* Center alignment for larger devices */
+        @media (min-width: 768px) {
+            #client-feedback {
+                text-align: center;
+            }
+        }
+
+        
+
+
+
+    </style>
+</head>
+
+<body class="bg-black text-white font-sans">
+    <!-- Banner -->
+    <!-- Stylish Banner -->
+
+    <div class="banner bg-[#c5912c] text-white flex justify-between items-center px-3 py-2 shadow-md">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-envelope text-lg md:text-base"></i>
+            <a href="mailto:talap65@gmail.com" class="text-xs md:text-sm font-medium hover:underline">talap65@gmail.com</a>
+        </div>
+        <h1 class="text-xs md:text-sm lg:text-base font-semibold text-center tracking-wide uppercase"> Welcome to <span
+                class="font-bold padding-desktop">Tala Properties</span> </h1>
+        <div class="flex space-x-2"> <a href="#" class="text-sm hover:text-gray-300"> <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" class="text-sm hover:text-gray-300"> <i class="fab fa-twitter"></i> </a> <a href="#"
+                class="text-sm hover:text-gray-300"> <i class="fab fa-linkedin"></i> </a>
+        </div>
+    </div> 
+    <!-- Navbar -->
+    <nav class="bg-black bg-opacity-50 backdrop-filter backdrop-blur-md py-4 px-4 border-b fixed top-0 w-full z-50"
+        style="border-color: #c5912c; top: 37px;">
+        <div class="container mx-auto flex justify-between items-center navbar-container" style="height: 48px;">
+            <!-- Apply the class here -->
+            <div class="flex items-center space-x-4">
+                <img src="Tala Properties.png" alt="Logo" class="h-6 md:h-8 max-h-8">
+            </div>
+            <!-- Hamburger Icon for Mobile -->
+            <div class="lg:hidden flex items-center ml-auto">
+                <button id="burger-menu" class="text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Wrap menu in a div with full width and flex properties -->
+            <div class="hidden lg:flex justify-center flex-grow space-x-4 text-white">
+                <ul id="menu" class="flex space-x-4">
+                    <li>
+                        <a href="#home"
+                            class="relative hover:text-white before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-[#c5912c] before:transition-all before:duration-300 hover:before:w-full">
+                            Home </a>
+                    </li>
+                    <li>
+                        <a href="#about"
+                            class="relative hover:text-white before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-[#c5912c] before:transition-all before:duration-300 hover:before:w-full">
+                            About Us </a>
+                    </li>
+                    <li>
+                        <a href="#listings"
+                            class="relative hover:text-white before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-[#c5912c] before:transition-all before:duration-300 hover:before:w-full">
+                            Properties </a>
+                    </li>
+                    <li>
+                        <a href="#gallery"
+                            class="relative hover:text-white before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-[#c5912c] before:transition-all before:duration-300 hover:before:w-full">
+                            Gallery </a>
+                    </li>
+                    <li>
+                        <a href="#client-feedback"
+                            class="relative hover:text-white before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-[#c5912c] before:transition-all before:duration-300 hover:before:w-full">
+                            Testimonial </a>
+                    </li>
+                    <li>
+                        <a href="#contact"
+                            class="relative hover:text-white before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-[#c5912c] before:transition-all before:duration-300 hover:before:w-full">
+                            Contact Us </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Sign In Button -->
+            <div class="hidden lg:block">
+                <a href="#signin" class="bg-[#c5912c] text-white px-4 py-2 rounded-full hover:bg-opacity-90 transition">
+                    Sign In </a>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default) -->
+        <ul id="mobile-menu"
+            class="lg:hidden absolute top-16 left-0 w-full bg-black bg-opacity-80 text-white hidden space-y-4 p-4 transform -translate-y-full transition-all duration-300 ease-in-out"
+            style="top: 58px;">
+            <li><a href="#home" class="hover:text-[#c5912c]">Home</a></li>
+            <li><a href="#about" class="hover:text-[#c5912c]">About Us</a></li>
+            <li><a href="#listings" class="hover:text-[#c5912c]">Properties</a></li>
+            <li><a href="#gallery" class="hover:text-[#c5912c]">Gallery</a></li>
+            <li><a href="#client-feedback" class="hover:text-[#c5912c]">Testimonial</a></li>
+            <li><a href="#contact" class="hover:text-[#c5912c]">Contact Us</a></li>
+            <!-- Sign In Button for Mobile -->
+            <li><a href="#signin" class="bg-[#c5912c] text-white px-4 py-2 rounded-full hover:bg-opacity-90 transition">
+                    Sign In </a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative bg-cover bg-center h-screen" style="background-image: url('bg.jpg');">
+        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="text-center">
+                <!-- Gradient text with improved contrast -->
+                <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 animate-fade-in bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.415); line-height: 1.3; padding-bottom: 0.2rem; overflow: visible;">
+                    Building a Legacy, One Property at a Time
+                </h2>
+    
+                <p class="text-base sm:text-lg md:text-xl text-grey animate-fade-in-bottom bg-gradient-to-r bg-clip-text text-transparent leading-relaxed md:leading-loose"
+                    style="background-image: linear-gradient(to right, #ffffff, #ffffff, #ffffff); text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.779);">
+                    Bringing together a team with passion, dedication, and resources <br> to help our clients reach their
+                    buying and selling goals. <br> We are with you every step of the way
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section id="about" class="relative py-16 text-white overflow-hidden" style="background-color: #020202;">
+        <!-- Main Content -->
+        <div
+            class="relative container mx-auto px-6 md:px-12 lg:px-20 flex flex-col md:flex-row-reverse items-center md:space-x-12">
+    
+            <!-- Content Section -->
+            <div class="md:w-1/2 space-y-6">
+                <!-- Section Title -->
+                <h3 class="text-xl font-bold text-gold-400 bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.23);">
+                    About Us
+                </h3>
+                <h2 class="text-2xl md:text-4xl font-bold mb-2 leading-relaxed animate-fade-in text-white">
+                    Welcome to <span class="inline">Tala Properties</span> where we bring your real estate dreams to
+                    life.
+                </h2>
+    
+                <!-- Mobile Image Section -->
+                <div class="md:hidden mt-6">
+                    <img src="about.jpg" alt="Mobile Optimized Image"
+                        class="w-full rounded-lg shadow-md transform transition-transform duration-500 ease-in-out hover:scale-110" />
+                </div>
+
+    
+                <p class="text-lg leading-relaxed text-gray-300">
+                    &ldquo;&nbsp;With no more than three homes per floor, a semi-private or private landing affords a
+                    discreet front door experience windows to take advantage of corner exposures and mesmerizing views.
+                    Superior quality and craftsmanship abound at every touchpoint, and with individual climate
+                    controls, year-round comfort is assured.&nbsp;&rdquo;
+                </p>
+    
+                <!-- Info and Stats -->
+                <div class="flex flex-col md:flex-row justify-center gap-6 md:gap-12">
+                    <!-- First Box -->
+                    <div
+                        class="text-center bg-white bg-opacity-10 p-6 rounded-xl shadow-xl transform hover:scale-105 transition-all flex flex-col justify-center items-center w-full sm:w-36 md:w-48 h-auto md:h-48 min-h-[150px]">
+                        <div class="text-[#c5912c] text-4xl md:text-5xl font-bold mb-2" id="years">0+</div>
+                        <p class="text-white text-sm md:text-xl">Years of Experience</p>
+                    </div>
+                    <!-- Second Box -->
+                    <div
+                        class="text-center bg-white bg-opacity-10 p-6 rounded-xl shadow-xl transform hover:scale-105 transition-all flex flex-col justify-center items-center w-full sm:w-36 md:w-48 h-auto md:h-48 min-h-[150px]">
+                        <div class="text-[#c5912c] text-4xl md:text-5xl font-bold mb-2" id="client">0+</div>
+                        <p class="text-white text-sm md:text-xl">Happy Clients</p>
+                    </div>
+                    <!-- Third Box -->
+                    <div
+                        class="text-center bg-white bg-opacity-10 p-6 rounded-xl shadow-xl transform hover:scale-105 transition-all flex flex-col justify-center items-center w-full sm:w-36 md:w-48 h-auto md:h-48 min-h-[150px]">
+                        <div class="text-[#c5912c] text-4xl md:text-5xl font-bold mb-2" id="properties">0+</div>
+                        <p class="text-white text-sm md:text-xl">Properties Sold</p>
+                    </div>
+                </div>
+    
+                <button class="rounded-full tab-btn px-6 py-2 font-semibold text-lg bg-[#c5912c] hover:bg-[#ffab03] hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-500 transform transition-all duration-300 hover:scale-105 
+                           md:self-start md:mx-0 mx-auto block">
+                    About Us
+                </button>
+            </div>
+    
+            <!-- Images Section -->
+            <div class="hidden md:flex md:w-1/2 justify-center items-center mt-8 md:mt-0 md:order-1"
+                style="margin-right: 200px;">
+                <div class="relative w-[45vh] h-[45vh] group">
+                    <img src="vl3.jpg" alt="bottom-image"
+                        class="shadow-lg transform group-hover:scale-105 group-hover:translate-x-[-16px] transition-all duration-300 w-[300px] h-[350px] object-cover mx-auto translate-x-[-70px] translate-y-[-70px]" />
+                    <div
+                        class="absolute left-0 top-0 w-[13px] h-[270px] bg-[#c5912c] translate-x-[-55.5px] translate-y-[-30px] transform group-hover:scale-105 group-hover:translate-x-[-10px] transition-all duration-300">
+                    </div>
+                    <div
+                        class="absolute bottom-0 right-0 z-10 transform group-hover:translate-y-[100px] transition-all duration-300">
+                        <img src="vl2.jpg" alt="top-image"
+                            class="shadow-lg border-l-10 border-[#c5912c] transform group-hover:scale-105 transition duration-300 w-full h-full object-cover mx-auto"
+                            style="width: 260px; height: 300px; transform: translate(15px, 10px);border-left-width: 15px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- Property Listings Preview -->
+    <section id="listings" class="py-16 px-6 bg-black text-black relative">
+        <div class="container mx-auto">
+            <center>
+                <h3 class="text-xl font-bold text-gold-400 bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.107);">
+                    Products</h3>
+            </center>
+            <br>
+            <!-- Section Title -->
+            <center>
+                <h2 class="text-2xl md:text-4xl font-bold mb-2 leading-relaxed animate-fade-in text-white">
+                    <span class="inline">Our Properties Listing</span>
+                </h2>
+            </center>
+            <br>
+            <br>
+            <br>
+
+            <!-- Property Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Property Item -->
+                <div class="relative group">
+                    <img src="gl1.jpg" alt="Gallery 1"
+                        class="w-full h-80 object-cover rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-0 group-hover:opacity-90 transition-opacity duration-300 rounded-lg">
+                    </div>
+                    <div
+                        class="absolute bottom-4 left-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <h3 class="text-xl font-semibold">VINTAGE VILLA</h3>
+                        <p class="text-sm text-gray-300">A serene time travel</p>
+                    </div>
+                </div>
+
+                <!-- Repeat for other images -->
+                <div class="relative group">
+                    <img src="villa2.jpg" alt="Gallery 3"
+                        class="w-full h-80 object-cover rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-0 group-hover:opacity-90 transition-opacity duration-300 rounded-lg">
+                    </div>
+                    <div
+                        class="absolute bottom-4 left-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <h3 class="text-xl font-semibold">VILLA CULLINAN</h3>
+                        <p class="text-sm text-gray-300">The pinnacle of perfection.</p>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <img src="gl3.jpeg" alt="Gallery 3"
+                        class="w-full h-80 object-cover rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-0 group-hover:opacity-90 transition-opacity duration-300 rounded-lg">
+                    </div>
+                    <div
+                        class="absolute bottom-4 left-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <h3 class="text-xl font-semibold">AZURE VILLA</h3>
+                        <p class="text-sm text-gray-300">A symbol of luxury.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="gallery" class="p-8">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+            <!-- Gallery Header -->
+            <div class="bold text-yellow-500 text-lg text-center md:text-left mb-4 md:mb-0">
+                <h3 class="text-xl font-bold text-gold-400 bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.107);">
+                    Gallery
+                </h3>
+            </div>
+        </div>
+    
+        <div class="container flex flex-col md:flex-row justify-between items-center md:items-start"
+            style="width: 100%; max-width: none;">
+            <!-- Property Gallery Heading (Centered on mobile, left-aligned on PC) -->
+            <h1 class="text-4xl font-bold mb-4 md:text-left text-center w-full md:w-auto">Property Gallery</h1>
+    
+            <!-- Tab Buttons (Centered on mobile, right-aligned and more right-aligned on larger screens) -->
+            <div
+                class="tab-buttons flex justify-center md:justify-end ml-auto space-x-4 overflow-x-auto sm:overflow-hidden w-full md:w-auto">
+                <button id="all-properties-btn" class="tab-btn active-tab px-4 py-2 whitespace-nowrap">All
+                    Properties</button>
+                <button id="photos-btn" class="tab-btn px-4 py-2 whitespace-nowrap">Photos</button>
+                <button id="videos-btn" class="tab-btn px-4 py-2 whitespace-nowrap">Videos</button>
+            </div>
+        </div>
+    
+        <br><br>
+    
+        <!-- All Properties Section -->
+        <div id="all-properties" class="tab-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="col-span-1">
+                <img src="a single high-rise apartment in a night blue sky.png" alt="High Rise Buildings"
+                    class="w-full sm:w-full sm:h-auto md:w-full md:h-[505px] object-cover hover-effect">
+            </div>
+            <div class="col-span-2 grid grid-cols-2 gap-4">
+                <img src="a modern cozy apartment lit with a fireplace.png" alt="Living Room"
+                    class="h-60 w-full object-cover hover-effect">
+                <img src="two tall apartment complexes at night.png" alt="Tall Buildings"
+                    class="h-60 w-full object-cover hover-effect">
+                <img src="modern living room.png" alt="Modern Living Room" class="h-60 w-full object-cover hover-effect">
+                <img src="a swimming pool at night in a luxury villa.png" alt="Swimming Pool"
+                    class="h-60 w-full object-cover hover-effect">
+            </div>
+        </div>
+    
+        <!-- Photos Section -->
+        <div id="photos" class="tab-section hidden grid grid-cols-2 gap-4 fade-in">
+            <img src="a modern cozy apartment lit with a fireplace.png" alt="Living Room"
+                class="h-60 w-full object-cover hover-effect">
+            <img src="two tall apartment complexes at night.png" alt="Tall Buildings"
+                class="h-60 w-full object-cover hover-effect">
+            <img src="modern living room.png" alt="Modern Living Room" class="h-60 w-full object-cover hover-effect">
+            <img src="a swimming pool at night in a luxury villa.png" alt="Swimming Pool"
+                class="h-60 w-full object-cover hover-effect">
+        </div>
+    
+        <!-- Videos Section -->
+        <div id="videos" class="tab-section hidden grid grid-cols-2 gap-4 fade-in">
+            <video src="example-video.mp4" controls class="h-60 w-full object-cover"></video>
+            <video src="example-video-2.mp4" controls class="h-60 w-full object-cover"></video>
+            <video src="example-video-3.mp4" controls class="h-60 w-full object-cover"></video>
+            <video src="example-video-4.mp4" controls class="h-60 w-full object-cover"></video>
+        </div>
+    </section>
+
+    <section id="client-feedback" class="py-16 px-6 relative bg-black text-gray-100 text-left md:text-center">
+        <div class="container mx-auto relative">
+                <h3 class="text-xl font-bold text-gold-400 bg-gradient-to-r bg-clip-text text-transparent"
+                    style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.107);">
+                    Testimonial</h3>
+                <br>
+                <h2 class="text-2xl md:text-4xl font-bold mb-2 leading-relaxed animate-fade-in text-white>
+                                Welcome to <span class=" inline">Tala Properties</span> where we bring your real estate
+                    dreams to
+                    life.
+                </h2>
+            <br>
+                <p class="text-lg leading-relaxed text-gray-300">
+                    At Tala Properties, our clients' satisfaction is our top priority. We take pride in delivering
+                    exceptional service
+                    and results, and our clients' testimonials speak volumes about their experiences with us. From
+                    navigating the
+                    complexities of real estate transactions to finding the perfect luxury property, our clients
+                    appreciate the expertise,
+                    dedication, and personalized attention we bring to every interaction. Here’s what some of them have
+                    to say:
+                </p>
+            <br>
+            <br>
+            <!-- Feedback Grid (Carousel) -->
+            <div class="relative overflow-hidden">
+                <div class="testimonial-carousel flex transition-transform duration-300 ease-in-out"
+                    style="scroll-behavior: smooth;">
+                    <!-- Slide 1 -->
+                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/3 px-4">
+                        <div
+                            class="bg-[#1F1F21] p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                            <i class="fas fa-quote-left text-[#c5912c] text-4xl mb-4 block"></i>
+                            <p class="text-white-700 italic mb-4">
+                                "The team helped me find my dream villa in no time. Their professionalism and dedication
+                                were unmatched!"
+                            </p>
+                            <div class="flex items-center space-x-4">
+                                <img src="client1.jpg" alt="Client Photo"
+                                    class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                                <div>
+                                    <h4 class="text-lg text-white font-bold">John Doe</h4>
+                                    <div class="text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <p class="text-sm text-white-500">Dubai, UAE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/3 px-4">
+                        <div
+                            class="bg-[#1F1F21] p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                            <i class="fas fa-quote-left text-[#c5912c] text-4xl mb-4 block"></i>
+                            <p class="text-white-700 italic mb-4">
+                                "Their expertise made the entire process stress-free. I highly recommend their services
+                                to
+                                anyone looking for luxury properties."
+                            </p>
+                            <div class="flex items-center space-x-4">
+                                <img src="client2.jpg" alt="Client Photo"
+                                    class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                                <div>
+                                    <h4 class="text-lg text-white font-bold">Jane Smith</h4>
+                                    <div class="text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <p class="text-sm text-white-500">London, UK</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/3 px-4">
+                        <div
+                            class="bg-[#1F1F21] p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                            <i class="fas fa-quote-left text-[#c5912c] text-4xl mb-4 block"></i>
+                            <p class="text-white-700 italic mb-4">
+                                "A seamless experience from start to finish. They truly understood my vision and brought
+                                it
+                                to life. Truly amazing!"
+                            </p>
+                            <div class="flex items-center space-x-4">
+                                <img src="client3.jpg" alt="Client Photo"
+                                    class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                                <div>
+                                    <h4 class="text-lg text-white font-bold">Michael Johnson</h4>
+                                    <div class="text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <p class="text-sm text-white-500">New York, USA</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/3 px-4">
+                        <div
+                            class="bg-[#1F1F21] p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                            <i class="fas fa-quote-left text-[#c5912c] text-4xl mb-4 block"></i>
+                            <p class="text-white-700 italic mb-4">
+                                "Tala Properties made my home-buying process smooth and easy. Their team is
+                                knowledgeable and friendly. Highly recommend
+                                them!"
+                            </p>
+                            <div class="flex items-center space-x-4">
+                                <img src="client4.png" alt="Client Photo"
+                                    class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                                <div>
+                                    <h4 class="text-lg text-white font-bold">Michael Davis</h4>
+                                    <div class="text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <p class="text-sm text-white-500">Chicago, IL</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Slide 5-->
+                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/3 px-4">
+                        <div
+                            class="bg-[#1F1F21] p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                            <i class="fas fa-quote-left text-[#c5912c] text-4xl mb-4 block"></i>
+                            <p class="text-white-700 italic mb-4">
+                                "Tala Properties helped me every step of the way. Their team was responsive and
+                                professional. Very happy with my new
+                                home!"
+                            </p>
+                            <div class="flex items-center space-x-4">
+                                <img src="client5.png" alt="Client Photo"
+                                    class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                                <div>
+                                    <h4 class="text-lg text-white font-bold">Robert Clark</h4>
+                                    <div class="text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <p class="text-sm text-white-500">Dallas, TX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Slide 6-->
+                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/3 px-4">
+                        <div
+                            class="bg-[#1F1F21] p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+                            <i class="fas fa-quote-left text-[#c5912c] text-4xl mb-4 block"></i>
+                            <p class="text-white-700 italic mb-4">
+                                "The service at Tala Properties is top-notch. They listened to my needs and found the
+                                perfect property. A fantastic
+                                experience!"
+                            </p>
+                            <div class="flex items-center space-x-4">
+                                <img src="client6.png" alt="Client Photo"
+                                    class="w-12 h-12 rounded-full border-2 border-[#c5912c]" />
+                                <div>
+                                    <h4 class="text-lg text-white font-bold">Jessica Williams</h4>
+                                    <div class="text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <p class="text-sm text-white-500">San Francisco, CA</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carousel Dots -->
+                <div class="flex justify-center mt-8 space-x-2">
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-500" data-index="0"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-500" data-index="1"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-500" data-index="2"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-500" data-index="3"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-500" data-index="4"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-500" data-index="5"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-16 px-6 relative bg-black text-white">
+        <div class="max-w-2xl mx-auto p-6">
+            <h3 class="text-xl font-bold text-gold-400 bg-gradient-to-r bg-clip-text text-transparent"
+                style="background-image: linear-gradient(to right, #ffab03, #ffab03, #ffab03); text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.107);">
+                FAQ</h3>
+            <h1 class="text-3xl font-bold mt-2 text-left">Your Questions, Answered</h1>
+            <h1 class="text-3xl font-bold mt-1 text-left">Because <span class="text-yellow-500">Tala Properties</span>
+                Shouldn't Be a Mystery.</h1>
+            <div class="mt-6">
+                <!-- FAQ Item -->
+                <div class="border border-yellow-500 p-4 mb-4">
+                    <div class="flex justify-between items-center cursor-pointer"
+                        onclick="toggleAnswer('answer1', this)">
+                        <h3 class="text-xl font-bold text-left">What types of properties are available through your
+                            agency?
+                        </h3>
+                        <span class="icon text-yellow-500 text-2xl transition-transform duration-300">&#43;</span>
+                    </div>
+                    <p id="answer1"
+                        class="answer text-gray-400 text-left overflow-hidden max-h-0 transition-all duration-300">
+                        We offer a variety of properties including residential homes, apartments, and condos, as well as
+                        commercial spaces like
+                        offices and retail shops. We also have vacation homes, luxury estates, and plots of land for
+                        sale or lease.
+                    </p>
+                </div>
+                <!-- FAQ Item -->
+                <div class="border border-yellow-500 p-4 mb-4">
+                    <div class="flex justify-between items-center cursor-pointer"
+                        onclick="toggleAnswer('answer2', this)">
+                        <h3 class="text-xl font-bold text-left">How to buy?</h3>
+                        <span class="icon text-yellow-500 text-2xl transition-transform duration-300">&#43;</span>
+                    </div>
+                    <p id="answer2"
+                        class="answer text-gray-400 text-left overflow-hidden max-h-0 transition-all duration-300">
+                        To buy a property, simply browse our listings, select the one you're interested in, and contact
+                        our sales team for more
+                        details. We'll guide you through the process, from viewing the property to signing the agreement
+                        and completing the
+                        payment.
+                    </p>
+                </div>
+                <!-- FAQ Item -->
+                <div class="border border-yellow-500 p-4 mb-4">
+                    <div class="flex justify-between items-center cursor-pointer"
+                        onclick="toggleAnswer('answer3', this)">
+                        <h3 class="text-xl font-bold text-left">Can I list my property with your agency?</h3>
+                        <span class="icon text-yellow-500 text-2xl transition-transform duration-300">&#43;</span>
+                    </div>
+                    <p id="answer3"
+                        class="answer text-gray-400 text-left overflow-hidden max-h-0 transition-all duration-300">
+                        Yes, you can! Contact us with your property details, and our team will assist you in listing it.
+                        We’ll help market your
+                        property to potential buyers and ensure a smooth selling process.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section id="contact" class="bg-black text-white py-16 px-6">
+        <h3 class="text-yellow-400 text-lg font-bold">Contact Us</h3>
+        <h1 class="text-3xl font-bold mt-2">Get In Touch With Tala Properties</h1>
+        <br><br>
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <!-- Image Section -->
+            <div
+                class="image-container group overflow-hidden rounded-lg transition-transform duration-500 hover:scale-105 shadow-lg">
+                <img src="agent.png" alt="Agent holding documents"
+                    class="w-full h-full rounded-lg transform -translate-x-2" />
+            </div>
+    
+            <!-- Form Section -->
+            <div class="form-container">
+                
+                <form class="mt-6 space-y-4">
+                    <!-- Name and Phone Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" placeholder="Name"
+                            class="bg-transparent border border-yellow-500 text-white py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-yellow-500" />
+                        <input type="text" placeholder="Phone"
+                            class="bg-transparent border border-yellow-500 text-white py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-yellow-500" />
+                    </div>
+                    <!-- Email and Location Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="email" placeholder="Email"
+                            class="bg-transparent border border-yellow-500 text-white py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-yellow-500" />
+                        <input type="text" placeholder="Location"
+                            class="bg-transparent border border-yellow-500 text-white py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-yellow-500" />
+                    </div>
+                    <!-- Message Box -->
+                    <textarea placeholder="Message" rows="4"
+                        class="bg-transparent border border-yellow-500 text-white py-2 px-4 rounded-md w-full focus:outline-none focus:ring focus:ring-yellow-500"></textarea>
+                    <!-- Submit Button -->
+                    <button type="submit"
+                        class="rounded-full tab-btn px-6 py-2 font-semibold text-lg bg-[#c5912c] hover:bg-[#ffab03] hover:text-black focus:outline-none focus:ring-2 focus:ring-yellow-500 transform transition-all duration-300 hover:scale-105">
+                        SEND
+                    </button>
+                </form>
+            </div>
+        </div>
+        <style>
+            /* Move image below the heading on mobile */
+            @media (max-width: 768px) {
+                .image-container {
+                    order: 1;
+                }
+    
+                .form-container {
+                    order: 2;
+                }
+            }
+        </style>
+    </section>
+
+
+
+
+    <footer id="footer" class="py-10 bg-black bg-opacity-60 backdrop-blur-sm border-t border-[#c5912c] text-white">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+    
+            <!-- Left Section: Logo and Social Media Links -->
+            <div class="space-y-8">
+                <!-- Logo -->
+                <img src="Tala Properties.png" alt="Tala Properties Logo" class="h-16 mb-4">
+    
+                <!-- Social Media Links -->
+                <div class="flex space-x-8 justify-center md:justify-start">
+                    <a href="#!" class="text-[#c5912c] text-3xl hover:text-white transition duration-300">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#!" class="text-[#c5912c] text-3xl hover:text-white transition duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#!" class="text-[#c5912c] text-3xl hover:text-white transition duration-300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+    
+            <!-- Middle Section: Links -->
+            <div class="space-y-8">
+                <h3 class="font-semibold text-lg text-[#c5912c]">Quick Links</h3>
+                <div class="space-y-4">
+                    <a href="#gallery" class="hover:text-[#c5912c] transition block">Gallery</a>
+                    <a href="#about" class="hover:text-[#c5912c] transition block">About Us</a>
+                    <a href="#properties" class="hover:text-[#c5912c] transition block">Properties</a>
+                </div>
+            </div>
+    
+            <!-- Middle Section: Resources -->
+            <div class="space-y-8">
+                <h3 class="font-semibold text-lg text-[#c5912c]">Resources</h3>
+                <div class="space-y-4">
+                    <a href="#faq" class="hover:text-[#c5912c] transition block">FAQs</a>
+                    <a href="#contact" class="hover:text-[#c5912c] transition block">Contact Us</a>
+                    <a href="#client-feedback" class="hover:text-[#c5912c] transition block">Testimonial</a>
+                </div>
+            </div>
+    
+            <!-- Right Section: Contact Information -->
+            <div class="space-y-6">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-map-marker-alt text-[#c5912c] text-lg"></i>
+                    <span class="text-sm md:text-base">1234 Property Lane, City Name, Country</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-envelope text-[#c5912c] text-lg"></i>
+                    <span class="text-sm md:text-base">info@talaproperties.com</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-phone text-[#c5912c] text-lg"></i>
+                    <span class="text-sm md:text-base">(123) 456-7890</span>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Copyright -->
+        <div class="mt-10 text-center">
+            <p class="text-sm md:text-base">&copy; 2024 Tala Properties Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+
+
+
+    <script>
+        function countUp(element, endValue, duration, suffix = "") {
+            let startValue = 0;
+            const step = (endValue / duration) * 50; // Adjust step interval for smooth counting
+
+            const interval = setInterval(() => {
+                startValue += step;
+                if (startValue >= endValue) {
+                    startValue = endValue;
+                    clearInterval(interval);
+                }
+                element.textContent = Math.floor(startValue) + suffix; // Add suffix like "+" after counting
+            }, 50);
+        }
+
+        const statsSection = document.querySelector('#about');  // Target the whole section or a specific class
+        const yearsCount = document.getElementById('years')
+        const clientsCount = document.getElementById('client')
+        const propertiesCount = document.getElementById('properties')
+
+        const observer1 = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log('Section is in view');
+                    countUp(yearsCount, 10, 2000, "+"); // 10+ years of experience
+                    countUp(clientsCount, 500, 2000, "+"); // 500+ happy clients
+                    countUp(propertiesCount, 200, 2000, "+"); // 200+ properties sold
+                    observer1.unobserve(entry.target); // Stop observing after animation
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        observer1.observe(statsSection); // Start observing the section
+    </script>
+
+
+
+
+
+    <!-- JavaScript to Toggle Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+                const burgerMenu = document.getElementById('burger-menu');
+                const mobileMenu = document.getElementById('mobile-menu');
+                const menuLinks = mobileMenu.querySelectorAll('a');
+
+                burgerMenu.addEventListener('click', () => {
+                    // Toggle visibility and smooth transition of the mobile menu
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenu.classList.toggle('-translate-y-full');  // Hide when closed
+                });
+
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        // Close the menu after a link is clicked
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.add('-translate-y-full');
+                    });
+                });
+            });
+
+    </script>
+
+
+
+
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Detect screen size
+        const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+
+        // Adjust animation settings based on screen size
+        const animationSettings = {
+            duration: isSmallScreen ? 1.2 : 0.8, // Longer duration on mobile for better visibility
+            opacity: 1,
+            y: 0,
+            ease: "power2.out",
+        };
+
+        const scrollTriggerSettings = {
+            start: isSmallScreen ? "top 95%" : "top 90%", // Trigger even earlier on mobile (adjusted to 40%)
+            toggleActions: "play none none none",
+            refreshPriority: 1,
+        };
+
+        gsap.utils.toArray('#about, #listings, #gallery,#team,#client-feedback,#faq, #contact,#footer').forEach(section => {
+            gsap.fromTo(
+                section,
+                { opacity: 0, y: isSmallScreen ? 100 : 50 }, // Increase Y movement for mobile
+                {
+                    ...animationSettings,
+                    scrollTrigger: {
+                        trigger: section,
+                        ...scrollTriggerSettings,
+                    }
+                }
+            );
+        });
+    </script>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab-btn');
+        const sections = document.querySelectorAll('.tab-section');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all buttons
+                tabs.forEach(button => button.classList.remove('active-tab'));
+                // Hide all sections
+                sections.forEach(section => {
+                    section.classList.add('hidden');
+                    section.style.opacity = 0; // Ensure opacity resets
+                });
+                // Add active class to clicked button
+                tab.classList.add('active-tab');
+                // Show relevant section with fade-in effect
+                const sectionId = tab.id.replace('-btn', '');
+                const activeSection = document.getElementById(sectionId);
+                activeSection.classList.remove('hidden');
+                setTimeout(() => {
+                    activeSection.style.opacity = 1; // Apply opacity after display is set
+                }, 50);
+            });
+        });
+
+        // Set the default section to be visible
+        document.getElementById('all-properties').classList.remove('hidden');
+        document.getElementById('all-properties').style.opacity = 1;
+    </script>
+
+
+
+    <script>
+        const carousel = document.querySelector('.testimonial-carousel');
+            const dots = document.querySelectorAll('.carousel-dot');
+            let itemsPerSlide = 3;
+            let currentIndex = 0;
+
+            function updateItemsPerSlide() {
+                // Adjust items per slide based on screen width
+                if (window.innerWidth <= 768) { // For mobile
+                    itemsPerSlide = 1;
+                } else if (window.innerWidth <= 1024) { // For tablets
+                    itemsPerSlide = 2;
+                } else { // For desktop
+                    itemsPerSlide = 3;
+                }
+            }
+
+            function showSlide(idx) {
+                const totalSlides = Math.ceil(carousel.children.length / itemsPerSlide);
+                currentIndex = (idx + totalSlides) % totalSlides;
+                const offset = -currentIndex * (100 / itemsPerSlide) * itemsPerSlide;
+                carousel.style.transform = `translateX(${offset}%)`;
+
+                dots.forEach((dot, dotIdx) => {
+                    dot.classList.toggle('bg-[#c5912c]', dotIdx === currentIndex);
+                    dot.classList.toggle('bg-gray-500', dotIdx !== currentIndex);
+                });
+            }
+
+            // Update items per slide on load and resize
+            window.addEventListener('resize', updateItemsPerSlide);
+            updateItemsPerSlide();
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+
+            showSlide(currentIndex);
+            setInterval(() => {
+                showSlide((currentIndex + 1) % (carousel.children.length / itemsPerSlide));
+            }, 5000);
+
+    </script>
+
+    <script>
+        function toggleAnswer(id, element) {
+            const answer = document.getElementById(id);
+            const icon = element.querySelector('.icon');
+
+            if (answer.style.maxHeight && answer.style.maxHeight !== '0px') {
+                // Close the dropdown
+                answer.style.maxHeight = '0px';
+                icon.innerHTML = '&#43;'; // Plus symbol
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Open the dropdown
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                icon.innerHTML = '&#43;'; // Plus symbol remains the same
+                icon.style.transform = 'rotate(45deg)';
+            }
+        }
+
+
+    </script>
+
+
+     
+
+
+</body>
+
+</html>
